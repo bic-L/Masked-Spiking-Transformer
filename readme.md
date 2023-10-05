@@ -10,7 +10,7 @@ To address this issue, we propose an energy-efficient architecture, **the Masked
 
 The Masked Spiking Transformer combines the self-attention mechanism and the ANN-to-SNN conversion method, achieving state-of-the-art accuracy on both static and neuromorphic datasets. Experimental results demonstrate the RSM method reduces redundant spike operations while keeping model performance over a certain range of mask rates across various model architectures. For instance, the RSM method reduces MST model power by 26.8% at a 75% mask rate with no performance drop. 
 
-<img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/acc.jpg" width="80" height="80"  alt="acc"/><br/>
+<img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/acc.jpg" width="160" height="160"  alt="acc"/><br/>
 ![Main Figure](figures/main.jpg)
 
 
