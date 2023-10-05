@@ -1,4 +1,4 @@
-## Masked Spiking Transformer (ICCV2023)
+## Masked Spiking Transformer (ICCV-2023)
 
 ### *checkpoints will be released soon!*
 
@@ -9,7 +9,7 @@ The combination of Spiking Neural Networks (SNNs) and Transformers has attracted
 
 ![performance](figures/acc.jpg)
 
-The paper is available at [arxiv](https://arxiv.org/pdf/2210.01208.pdf). 
+The paper is available at [ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
 ### Running the Code
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
