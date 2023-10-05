@@ -1,0 +1,11 @@
+apex==0.9.10dev
+numpy==1.23.2
+Pillow==9.2.0
+PyYAML==6.0
+setuptools==59.8.0
+spikingjelly==0.0.0.0.12
+termcolor==1.1.0
+timm==0.6.7
+torch==1.12.1+cu116
+torchvision==0.13.1+cu116
+yacs==0.1.8
