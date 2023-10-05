@@ -3,7 +3,7 @@
 ### *checkpoints will be released soon!*
 
 ### Abstract
-The combination of Spiking Neural Networks (SNNs) and Transformers has attracted significant attention due to their potential for high energy efficiency and high-performance nature. However, **there still remains a considerable challenge to achieving performance comparable to artificial neural networks in real-world applications**
+The combination of Spiking Neural Networks (SNNs) and Transformers has attracted significant attention due to their potential for high energy efficiency and high-performance nature. However, **there still remains a considerable challenge to achieving performance comparable to artificial neural networks in real-world applications**.
 Besides, **the mainstream method for ANN-to-SNN conversion trade increased simulation time and power for high-performance SNN, and generally consumes lots of computational resources when making inference**.
 
 To address this issue, we propose an energy-efficient architecture, **the Masked Spiking Transformer, that combines the benefits of SNNs and the high-performance self-attention mechanism in Transformer utilizing the ANN-to-SNN conversion methods**. Furthermomre, our method, called R**andom Spike Masking, prunes input spikes during both training and inference to reduce SNN computational costs**. 
