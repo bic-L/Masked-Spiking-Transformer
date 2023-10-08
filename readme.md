@@ -1,6 +1,6 @@
 ## Masked Spiking Transformer (ICCV-2023)
 
-The paper is available at [ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
+The paper is available at [Masked Spiking Transformer，ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
 
 ### *checkpoints will be released soon!*
 
