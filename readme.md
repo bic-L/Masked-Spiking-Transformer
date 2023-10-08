@@ -1,5 +1,7 @@
 ## Masked Spiking Transformer (ICCV-2023)
 
+The paper is available at [ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
+
 ### *checkpoints will be released soon!*
 
 ### Abstract
@@ -14,9 +16,6 @@ The Masked Spiking Transformer combines the self-attention mechanism and the ANN
 <img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/main.jpg"  alt="acc"/><br/>
 ![Main Figure](figures/main.jpg)
 
-
-
-The paper is available at [ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
 ### Running the Code
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
