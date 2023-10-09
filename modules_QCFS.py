@@ -16,7 +16,7 @@ class StraightThrough(nn.Module):
 class ScaledNeuron(nn.Module):
     def __init__(self, scale=1.):
         super(ScaledNeuron, self).__init__()
-        self.scale = scale
+        self.scale = 2. + scale
         self.t = 0
         self.neuron = neuron.IFNode(v_reset=None)
 
