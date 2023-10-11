@@ -14,19 +14,19 @@ The Masked Spiking Transformer combines the self-attention mechanism and the ANN
 
 <div align="center"> <img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/acc.jpg" width="700" height="500"  alt="acc"/> </div>
 <img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/main.jpg"  alt="acc"/><br/>
-![Main Figure](figures/main.jpg)
 
 ### Running the Code
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
 ```bash
-python -m torch.distributed.launch --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128
+torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128
 ```
 
 #### 2. SNN Validation:
 ```bash
-python -m torch.distributed.launch --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128 --snnvalidate True --sim_len 128
+torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128 --snnvalidate True --sim_len 128 --pretrained /path/to/weight/ --dataset imagenet
 ```
 - `--sim_len`: timestep of SNN.
 - `--snnvalidate`: enalbes SNN validation.
+- `--dataset`: name of dataset, choice=['imagenet', 'Cifar100', 'Cifar10'].
 
