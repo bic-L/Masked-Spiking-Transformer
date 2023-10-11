@@ -17,6 +17,8 @@ The Masked Spiking Transformer combines the self-attention mechanism and the ANN
 
 Checkpoints for MST( 0% masking rate) is available: [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar10_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar100_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/imagenet_checkpoint.pth)
 
+For more training details, please check out our paper and supplementary material.
+
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
 ```bash
 torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128
