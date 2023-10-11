@@ -39,7 +39,8 @@ def build_model(config, args):
                                          patch_norm=config.MODEL.MST.PATCH_NORM,
                                          use_checkpoint=config.TRAIN.USE_CHECKPOINT,
                                          fused_window_process=config.FUSED_WINDOW_PROCESS,
-                                         masking_ratio=args.masking_ratio)
+                                         masking_ratio=args.masking_ratio,
+                                         dataset=args.dataset,)
     else:
         raise NotImplementedError(f"Unkown model: {model_type}")
 
