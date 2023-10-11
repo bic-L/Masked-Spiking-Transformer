@@ -26,16 +26,19 @@ def Masking_Spike(x, masking_ratio=0.):
     return x * mask
 
 
-class Mlp(nn.Module):
-    def __init__(self, in_features, hidden_features=None, out_features=None, drop=0., masking_ratio=0.):
+class SpikingMlp(nn.Module):
+    def __init__(self, in_features, hidden_features=None, out_features=None, drop=0., masking_ratio=0., dataset='imagenet'):
         super().__init__()
         out_features = out_features or in_features
         hidden_features = hidden_features or in_features
+        self.dataset = dataset
         self.fc1 = nn.Linear(in_features, hidden_features)
-        self.norm1 = nn.BatchNorm1d(hidden_features)
+        if dataset == 'imagenet':
+            self.norm1 = nn.BatchNorm1d(hidden_features)
         self.fc1_if = nn.ReLU()
         self.fc2 = nn.Linear(hidden_features, out_features)
-        self.norm2 = nn.BatchNorm1d(out_features)
+        if dataset == 'imagenet':
+            self.norm2 = nn.BatchNorm1d(out_features)
         self.fc2_if = nn.ReLU()
         self.drop = nn.Dropout(drop)
         self.masking_ratio = masking_ratio
@@ -43,11 +46,13 @@ class Mlp(nn.Module):
 
     def forward(self, x):
         x = self.fc1(x)
-        x = self.norm1(x.transpose(1, 2).contiguous()).transpose(1, 2).contiguous()
+        if self.dataset == 'imagenet':
+            x = self.norm1(x.transpose(1, 2).contiguous()).transpose(1, 2).contiguous()
         x = self.fc1_if(x)
         x = self.drop(x)
         x = self.fc2(x)
-        x = self.norm2(x.transpose(1, 2).contiguous()).transpose(1, 2).contiguous()
+        if self.dataset == 'imagenet':
+            x = self.norm2(x.transpose(1, 2).contiguous()).transpose(1, 2).contiguous()
         x = self.fc2_if(x)
         x = self.drop(x)
         return x
@@ -197,11 +202,12 @@ class MaskedSpikingTransformerBlock(nn.Module):
         drop_path (float, optional): Stochastic depth rate. Default: 0.0
         fused_window_process (bool, optional): If True, use one kernel to fused window shift & window partition for acceleration, similar for the reversed part. Default: False
         masking_ratio (float, optional): masking ratio. Default: 0.0
+        dataset (str, optional): dataset name. Default: 'imagenet'
     """
 
     def __init__(self, dim, input_resolution, num_heads, window_size=7, shift_size=0,
                  mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0., attn_drop=0., drop_path=0.,
-                 fused_window_process=False, masking_ratio=0.):
+                 fused_window_process=False, masking_ratio=0., dataset='imagenet'):
         super().__init__()
         self.dim = dim
         self.input_resolution = input_resolution
@@ -226,7 +232,7 @@ class MaskedSpikingTransformerBlock(nn.Module):
         self.norm2 = nn.BatchNorm1d(dim)
         self.shortcut2_if = nn.ReLU()
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, drop=drop, masking_ratio=self.masking_ratio)
+        self.mlp = SpikingMlp(in_features=dim, hidden_features=mlp_hidden_dim, drop=drop, masking_ratio=self.masking_ratio, dataset=dataset)
 
         if self.shift_size > 0:
             # calculate attention mask for SW-MSA
@@ -366,12 +372,13 @@ class BasicLayer(nn.Module):
         use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False.
         fused_window_process (bool, optional): If True, use one kernel to fused window shift & window partition for acceleration, similar for the reversed part. Default: False
         masking_ratio (float, optional): masking ratio. Default: 0.0
+        dataset (str, optional): dataset name. Default: 'imagenet'
     """
 
     def __init__(self, dim, input_resolution, depth, num_heads, window_size,
                  mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0., attn_drop=0.,
                  drop_path=0., downsample=None, use_checkpoint=False,
-                 fused_window_process=False, masking_ratio=0.):
+                 fused_window_process=False, masking_ratio=0., dataset='imagenet'):
 
         super().__init__()
         self.dim = dim
@@ -389,7 +396,7 @@ class BasicLayer(nn.Module):
                                           qkv_bias=qkv_bias, qk_scale=qk_scale,
                                           drop=drop, attn_drop=attn_drop,
                                           drop_path=drop_path[i] if isinstance(drop_path, list) else drop_path,
-                                          fused_window_process=fused_window_process, masking_ratio=self.masking_ratio)
+                                          fused_window_process=fused_window_process, masking_ratio=self.masking_ratio, dataset=dataset)
             for i in range(depth)])
 
         # patch merging layer
@@ -476,6 +483,7 @@ class MaskedSpikingTransformer(nn.Module):
         use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False
         fused_window_process (bool, optional): If True, use one kernel to fused window shift & window partition for acceleration, similar for the reversed part. Default: False
         masking_ratio (float, optional): masking ratio. Default: 0.0
+        dataset (str, optional): dataset name. Default: 'imagenet'
     """
 
     def __init__(self, img_size=224, patch_size=4, in_chans=3, num_classes=1000,
@@ -483,7 +491,7 @@ class MaskedSpikingTransformer(nn.Module):
                  window_size=7, mlp_ratio=4., qkv_bias=True, qk_scale=None,
                  drop_rate=0., attn_drop_rate=0., drop_path_rate=0.1,
                  norm_layer=nn.LayerNorm, ape=False, patch_norm=True,
-                 use_checkpoint=False, fused_window_process=False, masking_ratio=0., **kwargs):
+                 use_checkpoint=False, fused_window_process=False, masking_ratio=0., dataset='imagenet', **kwargs):
         super().__init__()
 
         self.num_classes = num_classes
@@ -528,7 +536,7 @@ class MaskedSpikingTransformer(nn.Module):
                                drop_path=dpr[sum(depths[:i_layer]):sum(depths[:i_layer + 1])],
                                downsample=SpikingPatchMerging if (i_layer < self.num_layers - 1) else None,
                                use_checkpoint=use_checkpoint,
-                               fused_window_process=fused_window_process, masking_ratio=self.masking_ratio)
+                               fused_window_process=fused_window_process, masking_ratio=self.masking_ratio, dataset=dataset)
             self.layers.append(layer)
 
         self.norm = norm_layer(self.num_features)
@@ -574,7 +582,7 @@ class MaskedSpikingTransformer(nn.Module):
 
 
 if __name__ == '__main__':
-    model = MaskedSpikingTransformer(img_size=224, patch_size=4, in_chans=3, num_classes=100,
+    model = MaskedSpikingTransformer(img_size=224, patch_size=4, in_chans=3, num_classes=1000,
                                      embed_dim=96, depths=[2, 2, 6, 2], num_heads=[3, 6, 12, 24],
                                      window_size=7, mlp_ratio=4., ).cuda()
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -582,3 +590,4 @@ if __name__ == '__main__':
     input = torch.randn(1, 3, 224, 224).cuda()
     output = model(input)
     print(output.shape)
+    print(model)
