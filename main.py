@@ -24,9 +24,9 @@ from optimizer import build_optimizer
 from logger import create_logger
 from utils import load_checkpoint, load_pretrained, save_checkpoint, NativeScalerWithGradNormCount, auto_resume_helper, \
     reduce_tensor
-import wandb
 from utils_QCFS import *
 import spikingjelly.clock_driven.functional as functional
+from tqdm import tqdm
 
 
 def parse_option():
@@ -44,6 +44,7 @@ def parse_option():
     parser.add_argument('--seed', type=int, default=0, help="seed")
     parser.add_argument('--batch-size', type=int, help="batch size for single GPU")
     parser.add_argument('--data-path', type=str, help='path to dataset')
+    parser.add_argument('--dataset', type=str, default='imagenet', help='name of dataset')
     parser.add_argument('--zip', action='store_true', help='use zipped dataset instead of folder dataset')
     parser.add_argument('--cache-mode', type=str, default='part', choices=['no', 'full', 'part'],
                         help='no: no cache, '
@@ -65,7 +66,7 @@ def parse_option():
     parser.add_argument('--throughput', action='store_true', help='Test throughput only')
 
     # distributed training
-    parser.add_argument("--local_rank", type=int, default=0, help='local rank for DistributedDataParallel')
+    # parser.add_argument("--local_rank", type=int, default=0, help='local rank for DistributedDataParallel')
 
     # for acceleration
     parser.add_argument('--fused_window_process', action='store_true',
@@ -80,6 +81,7 @@ def parse_option():
     parser.add_argument('--masking_ratio', type=float, default=0., help="masking ratio")
     parser.add_argument('--snnvalidate', type=bool, default=False, help="enable snn validate")
     parser.add_argument('--sim_len', type=int, default=128, help='timesteps for simulation')
+    parser.add_argument('--wandb', type=bool, default=False, help='enable wandb')
 
     args, unparsed = parser.parse_known_args()
 
@@ -119,8 +121,8 @@ def main(config, args):
     snn.cuda()
     model_without_ddp = snn
     optimizer = build_optimizer(config, snn)
-
-    model = torch.nn.parallel.DistributedDataParallel(snn, device_ids=[config.LOCAL_RANK], broadcast_buffers=False)
+    deivce = int(os.environ['LOCAL_RANK'])
+    model = torch.nn.parallel.DistributedDataParallel(snn, device_ids=[deivce], broadcast_buffers=False)
     loss_scaler = NativeScalerWithGradNormCount()
 
     if config.TRAIN.ACCUMULATION_STEPS > 1:
@@ -177,9 +179,10 @@ def main(config, args):
 
         acc1, acc5, loss = validate(config, data_loader_val, model)
         if dist.get_rank() == 0:
-            wandb.log({"test_loss": loss}, step=epoch)
-            wandb.log({"test_acc": acc1}, step=epoch)
-            wandb.log({'lr': float(optimizer.state_dict()['param_groups'][0]['lr'])}, step=epoch)
+            if wandb:
+                wandb.log({"test_loss": loss}, step=epoch)
+                wandb.log({"test_acc": acc1}, step=epoch)
+                wandb.log({'lr': float(optimizer.state_dict()['param_groups'][0]['lr'])}, step=epoch)
             if max_accuracy < acc1:
                 max_accuracy = acc1
                 save_state = {'model': model_without_ddp.state_dict(),
@@ -208,7 +211,7 @@ def snn_validate(config, data_loader, model, sim_len):
     length = 0
     tot = torch.zeros(sim_len).cuda(non_blocking=True)
     end = time.time()
-    for idx, (images, target) in enumerate(data_loader):
+    for idx, (images, target) in enumerate(tqdm(data_loader)):
         images = images.cuda(non_blocking=True)
         target = target.cuda(non_blocking=True)
         spikes = 0
@@ -370,11 +373,12 @@ if __name__ == '__main__':
     if 'RANK' in os.environ and 'WORLD_SIZE' in os.environ:
         rank = int(os.environ["RANK"])
         world_size = int(os.environ['WORLD_SIZE'])
+        local_rank = int(os.environ['LOCAL_RANK'])
         print(f"RANK and WORLD_SIZE in environ: {rank}/{world_size}")
     else:
         rank = -1
         world_size = -1
-    torch.cuda.set_device(config.LOCAL_RANK)
+    torch.cuda.set_device(local_rank)
     torch.distributed.init_process_group(backend='nccl', init_method='env://', world_size=world_size, rank=rank)
     torch.distributed.barrier()
 
@@ -389,7 +393,12 @@ if __name__ == '__main__':
     logger = create_logger(output_dir=config.OUTPUT, dist_rank=dist.get_rank(), name=f"{config.MODEL.NAME}")
 
     if dist.get_rank() == 0:
-        wandb.init(project="mst", entity="mst", config=config, name='mst')
+        try:
+            import wandb
+        except ImportError:
+            args.wandb = False
+        if args.wandb:
+            wandb.init(project="mst", entity="mst", config=config, name='mst')
         path = os.path.join(config.OUTPUT, "config.json")
         with open(path, "w") as f:
             f.write(config.dump())
