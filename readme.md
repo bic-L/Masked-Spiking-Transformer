@@ -1,8 +1,6 @@
 ## Masked Spiking Transformer (ICCV-2023)
 
-The paper is available at [Masked Spiking Transformer，ICCV-23](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). 
-
-### *checkpoints will be released soon!*
+[Paper](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). [Poster](https://github.com/bic-L/Masked-Spiking-Transformer/files/12871675/Masked_Spiking_Transforer_Poster.pdf). [Video](https://user-images.githubusercontent.com/141820457/274327624-16db42f2-2df1-4127-bbac-f746b5aa9534.mp4)
 
 ### Abstract
 The combination of Spiking Neural Networks (SNNs) and Transformers has attracted significant attention due to their potential for high energy efficiency and high-performance nature. However, **there still remains a considerable challenge to achieving performance comparable to artificial neural networks in real-world applications** .
@@ -16,6 +14,8 @@ The Masked Spiking Transformer combines the self-attention mechanism and the ANN
 <img src="https://github.com/bic-L/Masked-Spiking-Transformer/blob/master/figures/main.jpg"  alt="acc"/><br/>
 
 ### Running the Code
+
+Checkpoints for MST( 0% masking rate) is available: [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar10_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar100_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/imagenet_checkpoint.pth)
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
 ```bash
