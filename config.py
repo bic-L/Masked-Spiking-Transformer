@@ -40,7 +40,7 @@ _C.DATA.NUM_WORKERS = 8
 # -----------------------------------------------------------------------------
 _C.MODEL = CN()
 # Model type
-_C.MODEL.TYPE = ' mst'
+_C.MODEL.TYPE = 'mst'
 # Model name
 _C.MODEL.NAME = ''
 # Pretrained weight from checkpoint, could be imagenet22k pretrained weight
@@ -199,6 +199,8 @@ def update_config(config, args):
         config.merge_from_list(args.opts)
 
     # merge from specific arguments
+    if args.dataset:
+        config.DATA.DATASET = args.dataset
     if args.learning_rate:
         config.TRAIN.BASE_LR = args.learning_rate
     if args.seed:
@@ -246,7 +248,7 @@ def update_config(config, args):
         config.TRAIN.OPTIMIZER.NAME = args.optim
 
     # set local rank for distributed training
-    config.LOCAL_RANK = args.local_rank
+    # config.LOCAL_RANK = args.local_rank
 
     # output folder
     config.OUTPUT = os.path.join(config.OUTPUT, config.MODEL.NAME, config.TAG)
