@@ -15,7 +15,8 @@ The Masked Spiking Transformer combines the self-attention mechanism and the ANN
 
 ### Running the Code
 
-Checkpoints for MST( 0% masking rate) is available: [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar10_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar100_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/imagenet_checkpoint.pth)
+Checkpoints:
+MST( 0% masking rate): [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar10_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/Cifar100_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint/imagenet_checkpoint.pth)
 
 MST( 75% masking rate): [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/cifar10_75._masking_ratio_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/Cifar100_75._masking_ratio_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/imagenet_75._masking_ratio_checkpoint.pth)
 
