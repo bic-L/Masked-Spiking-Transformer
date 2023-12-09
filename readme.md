@@ -21,7 +21,7 @@ MST( 0% masking rate): [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transf
 
 MST( 75% masking rate): [Cifar-10](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/cifar10_75._masking_ratio_checkpoint.pth), [Cifar-100](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/Cifar100_75._masking_ratio_checkpoint.pth), [Imagenet](https://github.com/bic-L/Masked-Spiking-Transformer/releases/download/checkpoint_with_mask/imagenet_75._masking_ratio_checkpoint.pth)
 
-For more training details, please check out our paper and supplementary material.
+For more training details, please check out our paper and supplementary material. (Note: we used 8×3090 GPU cards for training)
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
 ```bash
@@ -30,7 +30,7 @@ torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128
 
 #### 2. SNN Validation:
 ```bash
-torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128 --snnvalidate True --sim_len 128 --pretrained /path/to/weight/ --dataset imagenet
+torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128 --snnvalidate True --sim_len 128 --pretrained /path/to/weight/ --dataset imagenet --masking_ratio masking_rate
 ```
 - `--sim_len`: timestep of SNN.
 - `--snnvalidate`: enalbes SNN validation.
