@@ -25,7 +25,7 @@ For more training details, please check out our paper and supplementary material
 
 #### 1. Pre-training ANN MST with QCFS function on ImageNet with multiple GPUs:
 ```bash
-torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128
+torchrun --nproc_per_node 8 main.py --cfg configs/mst/MST.yaml --batch-size 128 --masking_ratio masking_rate
 ```
 
 #### 2. SNN Validation:
