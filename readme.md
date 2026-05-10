@@ -1,6 +1,9 @@
 ## Masked Spiking Transformer (ICCV-2023)
 
-Masked Spiking Transformer, ICCV'23: [[Paper]](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). [[Poster]](https://github.com/bic-L/Masked-Spiking-Transformer/files/12871675/Masked_Spiking_Transforer_Poster.pdf). [[Video]](https://user-images.githubusercontent.com/141820457/274327624-16db42f2-2df1-4127-bbac-f746b5aa9534.mp4)  [[IJCV-Version]](https://www.researchsquare.com/article/rs-6004117/v1)
+Masked Spiking Transformer, ICCV'23: [[Paper]](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). [[Poster]](https://github.com/bic-L/Masked-Spiking-Transformer/files/12871675/Masked_Spiking_Transforer_Poster.pdf). [[Video]](https://user-images.githubusercontent.com/141820457/274327624-16db42f2-2df1-4127-bbac-f746b5aa9534.mp4)  [[IJCV-Version]](https://link.springer.com/article/10.1007/s11263-026-02872-6)
+
+**Code for the IJCV version will be available soon!
+**
 
 ### Abstract
 The combination of Spiking Neural Networks (SNNs) and Transformers has attracted significant attention due to their potential for high energy efficiency and high-performance nature. However, **there still remains a considerable challenge to achieving performance comparable to artificial neural networks in real-world applications** .
