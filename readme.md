@@ -1,4 +1,4 @@
-## Masked Spiking Transformer (ICCV-2023)
+## Masked Spiking Transformer (ICCV-2023 + IJCV-2026) 
 
 Masked Spiking Transformer, ICCV'23: [[Paper]](https://openaccess.thecvf.com/content/ICCV2023/html/Wang_Masked_Spiking_Transformer_ICCV_2023_paper.html). [[Poster]](https://github.com/bic-L/Masked-Spiking-Transformer/files/12871675/Masked_Spiking_Transforer_Poster.pdf). [[Video]](https://user-images.githubusercontent.com/141820457/274327624-16db42f2-2df1-4127-bbac-f746b5aa9534.mp4)  [[IJCV-Version]](https://link.springer.com/article/10.1007/s11263-026-02872-6)
 
